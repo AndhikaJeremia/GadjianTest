@@ -1,0 +1,9 @@
+#ContainSideNav{
+    display: flex;
+    flex-direction: row;
+}
+#contain-content{
+    /* margin: 20px; */
+    display: flex;
+    justify-content: center;
+}

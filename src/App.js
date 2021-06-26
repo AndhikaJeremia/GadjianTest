@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
+import HomePage from './pages/home'
+import PersonelListPage from './pages/personel_list'
+import Daily_attendance from './pages/daily_attendance'
+import LoginPage from './pages/login'
+import NotFound from './pages/not_found'
+import Logout from './pages/logout'
+import { useDispatch, useSelector } from 'react-redux'
+import { login } from './action'
 
-function App() {
+
+export default function App() {
+  const dispatch = useDispatch()
+  const {username} = useSelector((state) => {
+    return{
+      username: state.dataUserReducer.username
+    }
+  })
+  React.useEffect(()=> {
+    let data = localStorage.getItem('userData')
+    if(data !== null){
+      let newdata = JSON.parse(data)
+      dispatch(login(newdata.username))
+    }
+  },[username])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {username ?
+        <Switch>
+          <Route path='/' component={HomePage} exact />
+          <Route path='/personnel_list' component={PersonelListPage} />
+          <Route path='/daily_attendance' component={Daily_attendance} />
+          <Route path='/logout' component={Logout} />
+          <Route component={NotFound}/>
+        </Switch>
+        :
+        <Switch>
+          <Route path='/' component={HomePage} exact />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/logout' component={Logout} />
+          <Route component={NotFound}/>
+        </Switch>
+      }
     </div>
-  );
+  )
 }
-
-export default App;
